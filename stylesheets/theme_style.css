@@ -1,0 +1,28 @@
+:root {
+  --themeColour1: white;
+  --themeColour2: white;
+  --themeColour3: white;
+  --themeColour4: white;
+  --themeColour5: white;
+  --themeColourButton: white;
+}
+.themeColour1 {
+  background-color: var(--themeColour1);
+}
+.themeColour2 {
+  background-color: var(--themeColour2);
+}
+.themeColour3 {
+  background-color: var(--themeColour3);
+}
+.themeColour4 {
+  background-color: var(--themeColour4);
+}
+.themeColour5 {
+  background-color: var(--themeColour5);
+}
+.themeColourButton {
+  width: 30px;
+  height: 30px;
+  background-color: var(--themeColourButton);
+}

@@ -25,6 +25,33 @@ function checkConnection (model) {
   }, 4000);
 }
 
+var setTheme = function (themeNumber) {
+  document.body.style.setProperty('--themeColour1', themeColours[themeNumber][0]);
+  document.body.style.setProperty('--themeColour2', themeColours[themeNumber][1]);
+  document.body.style.setProperty('--themeColour3', themeColours[themeNumber][2]);
+  document.body.style.setProperty('--themeColour4', themeColours[themeNumber][3]);
+  document.body.style.setProperty('--themeColour5', themeColours[themeNumber][4]);
+  if (themeNumber < Object.keys(themeColours).length) {
+  document.body.style.setProperty('--themeColourButton', themeColours[themeNumber + 1][0]);
+  } else {
+  document.body.style.setProperty('--themeColourButton', themeColours[1][0]);
+  }
+};
+
+var themeColours = {
+  // The keys iterate from 1 upwards
+  // The array contains the primary and secondary colours of the theme
+  "1":["#474655","#756A76","#B0656C","#E4923E","#F47835"],
+  "2":["#332D39","#65677A","#8EA0B2","#ABD7CA","#F5ECD6"],
+  "3":["#4E453D","#6DA79E","#9BBCAD","#C8CBB2","#CA723C"],
+  "4":["#7D8861","#AA7E61","#D7A778","#CE9D60","#8E8E8D"],
+  "5":["#5A2735","#586166","#D3AB83","#F2A44F","#EF5C0F"],
+  "6":["#3C6062","#5DBCB2","#CAEEE2","#E8DFB2","#FCA042"],
+};
+
+var themeNumber = 1;
+window.onload = function(){setTheme(themeNumber)};
+
 module.exports = View.extend({
   template: templates.main,
   autoRender: true,
@@ -48,7 +75,8 @@ module.exports = View.extend({
   events: {
     'click a[href]': 'handleLinkClick',
     'click [data-hook~=tour-button]': 'startTour',
-    'click [data-hook~=menu-button]': 'handleMenu'
+    'click [data-hook~=menu-button]': 'handleMenu',
+    'click [data-hook~=switchTheme]': 'switchTheme'
   },
   startTour: function () {
     var intro = Tour.introJs();
@@ -116,6 +144,15 @@ module.exports = View.extend({
       e.preventDefault();
       app.navigate(localPath);
     }
+  },
+  
+  switchTheme: function () {
+    if (themeNumber < Object.keys(themeColours).length) {
+      themeNumber++;
+    } else {
+      themeNumber = 1;
+    }
+    setTheme(themeNumber);
   }
 
 });
