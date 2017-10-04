@@ -3,6 +3,7 @@ var templates = require('../templates');
 var Spot = require('spot-framework');
 var app = require('ampersand-app');
 
+var WelcomeView = require('./help/welcome');
 // For the help
 var Tour = require('intro.js');
 
@@ -10,13 +11,15 @@ module.exports = PageView.extend({
   initialize: function () {
     this.pageName = 'home';
     var introWelcome = Tour.introJs();
+
+    console.log(WelcomeView);
     introWelcome.setOptions({
       'showStepNumbers': false,
       'showBullets': false,
       'showProgress': false,
       steps: [
         {
-          intro: '<center>Welcome to SPOT!</center><ul><li><br>If you want to discover SPOT, you can start a demo session at the bottom of this page.</li><li><br>When you need help, please use <b>Help</b> button at the bottom of the left menu.</ul>'
+          intro: WelcomeView
         }
       ]
     });
@@ -44,16 +47,58 @@ module.exports = PageView.extend({
   events: {
     'click [data-hook~=demo-session]': 'demoSession'
   },
+  subviews: {
+        welcome: {
+            hook: 'welcome-info',
+            prepareView: function (el) {
+              return new WelcomeView({
+                el: el,
+                model: this.model
+              });
+            }
+            }
+    },
+    render: function () {
+      this.renderWithTemplate(this);
+      this.renderSubview(welcome);
+    },
   demoSession: function () {
     console.log('Starting the demo session');
+
     app.message({
       text: 'Starting the demo session. Please wait.',
       type: 'ok'
     });
+
     var getJSON = function (url, callback) {
       var xhr = new window.XMLHttpRequest();
+
+
+
+
       xhr.open('GET', url, true);
       xhr.responseType = 'json';
+
+      // xhr.addEventListener("progress", function (evt) {
+      //     //console.log(evt.lengthComputable); // false
+      //     var contentLength;
+      //     if (evt.lengthComputable) {
+      //         contentLength = evt.total;
+      //     }
+      //     else {
+      //       console.log(evt.target.getResponseHeader);
+      //         //contentLength = evt.target.getResponseHeader('x-decompressed-content-length');
+      //         contentLength = evt.target.getResponseHeader("X-Content-Length");
+      //         //contentLength = evt.target.response.length;
+      //   }
+      //
+      //   var percentComplete = evt.loaded / contentLength;
+      //   //progressElem.html(Math.round(percentComplete * 100) + "%");
+      //   //console.log(Math.round(percentComplete * 100) + "%\n"); // false
+      //   console.log(evt.loaded + " of " + contentLength + "%\n");
+      //
+      // }, false);
+
       xhr.onload = function () {
         var status = xhr.status;
         if (status === 200) {
@@ -64,6 +109,8 @@ module.exports = PageView.extend({
       };
       xhr.send();
     };
+
+
 
     var sessionUrl = 'https://raw.githubusercontent.com/fdiblen/spot-data/87ed77fc3f3585e7b8d4c164ffe7aae486761962/demo_session.json';
 
