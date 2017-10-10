@@ -3,7 +3,6 @@ var templates = require('../templates');
 var Spot = require('spot-framework');
 var app = require('ampersand-app');
 
-var WelcomeView = require('./help/welcome');
 // For the help
 var Tour = require('intro.js');
 
@@ -12,14 +11,13 @@ module.exports = PageView.extend({
     this.pageName = 'home';
     var introWelcome = Tour.introJs();
 
-    console.log(WelcomeView);
     introWelcome.setOptions({
       'showStepNumbers': false,
       'showBullets': false,
       'showProgress': false,
       steps: [
         {
-          intro: WelcomeView
+          intro: templates.help.welcome()
         }
       ]
     });
@@ -41,27 +39,13 @@ module.exports = PageView.extend({
       console.log('Starting the tour.');
       introWelcome.start();
     }
+    introWelcome.start();
   },
   pageTitle: 'Home',
   template: templates.home,
   events: {
     'click [data-hook~=demo-session]': 'demoSession'
   },
-  subviews: {
-        welcome: {
-            hook: 'welcome-info',
-            prepareView: function (el) {
-              return new WelcomeView({
-                el: el,
-                model: this.model
-              });
-            }
-            }
-    },
-    render: function () {
-      this.renderWithTemplate(this);
-      this.renderSubview(welcome);
-    },
   demoSession: function () {
     console.log('Starting the demo session');
 
